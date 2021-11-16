@@ -1,0 +1,67 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}NodeJS commits{% endblock %}
+
+{% block body %}
+<div class="container-fluid">
+    {% for label,messages in app.flashes(['success', 'warning']) %}
+        {% for message in messages %}
+            <div class="alert alert-{{label}} alert-dismissible fade in">
+                {{ message }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        {% endfor %}
+    {% endfor %}
+
+    <h2 class="text-center">NodeJS Commits</h2>
+    
+    {% if commits %}
+        <table class="table">
+        <thead>
+            <tr class="bg-primary">
+                <th scope="col">#</th>
+                <th scope="col">SHA</th>
+                <th scope="col">Commit URL</th>
+                <th scope="col">Author Name</th>
+                <th scope="col">Author Email</th>
+                <th scope="col">Author URL</th>
+                <th scope="col">Committer Name</th>
+                <th scope="col">Committer Email</th>
+                <th scope="col">Committer URL</th>
+                <th scope="col">Commit Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for commit in commits %}
+            {% set lastChar = commit.sha|last %}
+                <tr {% if lastChar >= 0 and lastChar <= 9 %} class="number" {% endif %}>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ commit.sha|slice(0, 10)}}</td>
+                    <td><a href="{{ commit.html_url }}">{{ commit.html_url|slice(0, 30)}}</a></td>
+                    <td>{{ commit.author_name}}</td>
+                    <td>{{ commit.author_email}}</td>
+                    <td><a href="{{ commit.author_url }}">{{ commit.author_url|slice(0, 30)}}</a></td>
+                    <td>{{ commit.committer_name}}</td>
+                    <td>{{ commit.committer_email}}</td>
+                    <td><a href="{{ commit.committer_url }}">{{ commit.committer_url|slice(0, 30)}}</a></td>
+                    <td>
+                        {% if commit.status %}
+                            <span class="text-success">Verified</span>
+                        {% else %}
+                            <span class="text-danger">Not Verified</span>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+        <div class="text-center">
+            <p class="text-muted">No data found!</p>
+            <a class="btn btn-primary d-block" href="{{ path('fetch')}}" role="button">Fetch Commits</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
