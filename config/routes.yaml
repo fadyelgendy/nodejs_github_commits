@@ -3,11 +3,6 @@ fetch:
    controller: App\Controller\FetchController::fetch
    methods: GET|HEAD
 
-store:
-   path: /store
-   controller: App\Controller\FetchController::store
-   methods: POST
-
 index:
    path: /
    controller: App\Controller\CommitController::index
